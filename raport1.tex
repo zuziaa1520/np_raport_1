@@ -1,0 +1,240 @@
+\documentclass[a4paper,onecolumn,twoside,10pt]{article}%{mwrep}
+
+\usepackage{times}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage{lmodern} %Type1-font for non-english texts and characters
+\usepackage{setspace}
+\usepackage{enumitem}
+
+\usepackage[cmex10]{amsmath}
+
+%% Packages for Graphics & Figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{bmpsize}
+
+\usepackage{graphicx} %%For loading graphic files
+\usepackage[pdf]{pstricks}
+\usepackage{pst-all}
+\usepackage{moredefs}
+%\usepackage{auto-pst-pdf}
+%\usepackage{auto-pst-pdf}
+\usepackage[crop=off]{auto-pst-pdf}
+
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage{float}
+\usepackage{color}
+\usepackage{xcolor}
+
+\usepackage{subfigure}
+\usepackage{multirow}
+
+%\usepackage{epstopdf}
+\definecolor{light-gray}{gray}{0.4}
+\definecolor{mauve}{rgb}{0.88, 0.69, 1.0}
+\definecolor{pakistangreen}{rgb}{0.0, 0.4, 0.0}
+\definecolor{pearl}{rgb}{0.94, 0.92, 0.84}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{gray-pp}{rgb}{0.13, 0.6, 0.82}
+
+\usepackage{colortbl}
+\usepackage{listings}
+\lstset{
+	basicstyle=\footnotesize\ttfamily,
+	columns=fullflexible,
+	frame=single,
+	breaklines=true,
+	numbers=left, stepnumber=2, numbersep=5pt,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{pakistangreen},
+	stringstyle=\color{mauve},
+	backgroundcolor = \color{whitesmoke},
+	breakatwhitespace=true,
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+
+
+\cfoot{-~\thepage \textcolor{light-gray}{~| Strona~-}}
+
+\hyphenpenalty=10000		% nie dziel wyrazów zbyt często
+\clubpenalty=10000			% kara za sierotki
+\widowpenalty=10000			% nie pozostawiaj wdów
+\brokenpenalty=10000		% nie dziel wyrazów między stronami
+\exhyphenpenalty=999999		% nie dziel słów z myślnikiem
+\righthyphenmin=3			% dziel minimum 3 litery
+
+\tolerance=4500
+\pretolerance=250
+\hfuzz=1.5pt
+\hbadness=1450
+
+\sloppy						% umacnia pozycję prawego marginesu
+
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-5cm}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-5cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\topmargin -1.25cm
+\footskip 1.4cm
+
+\linespread{1.3}
+
+\begin{document}
+	\raggedbottom 
+	%\input{hypernation}
+%\input{title-page}
+\setlength\extrarowheight{2pt}
+\begin{table}[ht]
+	\centering
+	%\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|p{5cm}|p{7cm}|p{2cm}|}
+			\hline
+			%\rowcolor{gray}
+			%\multicolumn{3}{|c|}{\textcolor[rgb]{1,1,1}{Scalenie trzech kolumn}}\\
+			
+			\multicolumn{2}{|c|}{\cellcolor{gray-pp}\textcolor[rgb]{1,1,1}{Politechnika Poznańska}}  & \multicolumn{1}{c|}{\multirow{3}{*}{\resizebox{15mm}{!}{\includegraphics{PP_znak_konturowy_CMYK.pdf}}}}\\ 
+			\multicolumn{2}{|c|}{\cellcolor{gray-pp}\textcolor[rgb]{1,1,1}{Wydział Automatyki, Robotyki i Elektrotechniki}} & \\ 
+			\multicolumn{2}{|c|}{\cellcolor{gray-pp}\textcolor[rgb]{1,1,1}{Instytut Robotyki i Inteligencji Maszynowej}} & \\ 
+			\hline 
+			\multicolumn{1}{|c|}{Dz>AiR>Sem5} & \multicolumn{1}{c|}{Napędy przekształtnikowe (NP)} & \multicolumn{1}{c|}{2025/26 (s.zim.)} \\
+			\hline
+			\textbf{Skład osobowy:} \par Zuzanna Andrzejak 159522 \par Jan Andrzejewski  000000 \par Mateusz Banaszak 000000 \par Piotr Bednarek  000000 & 
+			\textbf{Silnik elektryczny i jego model obwodowy. Siły: Lorentz'a, elektrodynamiczna, elektromotoryczna. Zbieżność modelu.} 
+			& Data wyk.:\par 20.11.2025\\
+			\hline
+			Grupa 1  & Ćwiczenie 1 & Zajęcia 1 \\
+			\hline
+		\end{tabular}%
+		%}
+\end{table}	
+\setlength\extrarowheight{0pt}
+\vspace{1.5cm}
+\tableofcontents
+\newpage
+
+\section{Wprowadzenie}
+
+Ćwiczenie laboratoryjne miało na celu analizę modelu obwodowego silnika obcowzbudnego komutatorowego prądu stałego. Model zastosowany podczas ćwiczenia był modelem zidealizowanym i nie stanowił dokładnego odwzorowania rzeczywistego ukłądu napędowego. 
+
+Ćwiczenie przeprowadzono w sali C3 w budynku A22b, wyposażonej w zestawy laboratoryjne napędowe, panele sterowania oraz przyrządy pomiarowe. W trakcie zajęć wykorzystano równień środowisko symulacyjne MATLAB wraz z Simulink. 
+\vspace{1.5cm}
+
+\section{Wstęp teoretyczny}
+
+Model zrealizowany podczas ćwiczenia można w przybliżeniu opisać z wykorzystaniem podstawowych zjawisk fizycznych. Obejmują one przede wszystkim zjawiska elektromagnetyczne, elektromotoryczne oraz elektrodynamiczne, które określają zależności między przepływem prądu, strumieniem magnetycznym a momentem elektromagnetycznym oraz momentami wynikającymi z dynamiki ruchomych części silnika.
+
+\subsection{Siła Lorentz'a}
+Za generowanie siły w silniku prądu stałego odpowiada siła Lorentz'a, która określa oddziaływanie pola elektrycznego i magnetycznego na poruszający się ładunek. Jest określana równaniem:
+
+\begin{equation}
+	\vec{F}_{l} = q(\vec{E} + \vec{v} \times \vec{B})
+	\label{eq:lorentz}
+\end{equation}
+gdzie:
+$\vec{F}$ to wektor siły Lorentz'a (N),
+$q$ to ładunek elektryczny cząstki (C),
+$\vec{E}$ to wektor natężenia pola elektrycznego (V/m),
+$\vec{v}$ to wektor prędkości cząstki (m/s),
+$\vec{B}$ to pseudowektor indukcji magnetycznej (T).
+
+
+\subsection{Siła elektrodynamiczna}
+
+W rozważaniach dotyczących pracy silnika prądu stałego można pominąć wpływ wektora natężenia pola elektrycznego, gdyż jest ono praktycznie jednorodne. Przewodnik z prądem, umieszczony w polu magnetycznym, doświadcza siły, której kierunek i wartość zależą od ustawienia przewodnika względem pola. 
+Maksymalna wartość siły występuje, gdy przewodnik jest ustawiony prostopadle do pola magnetycznego, co zapewnia konstrukcja \textbf{komutatora}. 
+
+W tych warunkach siła Lorentza przyjmuje postać:
+\begin{equation}
+	F_{l} = qvB
+	\label{eq:lorentz_simple}
+\end{equation}
+
+Dla przewodnika o określonej długości, w którym przepływają ładunki tworzące prąd, siła Lorentza przyjmuje postać \textbf{siły elektrodynamicznej}:
+\begin{equation}
+	\vec{F}_{ed} = I \, \vec{l} \times \vec{B}
+	\label{eq:sila_ed}
+\end{equation}
+gdzie: $I$ to natężenie prądu, $\vec{l}$ to wektor długości przewodnika.
+
+
+\subsection{Moment elektromagnetyczny}
+
+Moment elektromagnetyczny w silniku prądu stałego jest generowany w wyniku działania sił elektrodynamicznych \eqref{eq:sila_ed} na uzwojenia twornika i wyraża się wzorem:
+\begin{equation}
+	T_e = \vec{r} \times \vec{F}_{ed} = I \left[ \vec{r} \times \left( \vec{l} \times \vec{B} \right) \right]
+	\label{eq:moment_em_dlugie}
+\end{equation}
+gdzie: $I$ to natężenie prądu (A), $\vec{l}$ to długość uzwojenia (m), $\vec{B}$ to wektor indukcji magnetycznej (T), $\vec{r}$ to ramię siły (m).
+\\
+
+Dla uproszczonego modelu silnika prądu stałego można wyróżnić tzw. \textbf{stałą momentową $k_{\Phi}$}, która zależy od parametrów konstrukcyjnych silnika. Wtedy moment elektromagnetyczny wyraża się zależnością:
+\begin{equation}
+	T_e = i_a \, k_{\Phi}
+	\label{eg:moment_Te}
+\end{equation}
+gdzie: $T_e$ to moment elektromagnetyczny (Nm), $i_a$ to prąd twornika (A), $k_{\Phi}$ to stała momentowa (Nm/A).
+
+
+\subsection{Siła elektromotoryczna}
+
+Siła elektromotoryczna (SEM) powstaje wskutek ruchu przewodnika w polu magnetycznym. Przewodniki wirnika przecinają linie pola, co indukuje napięcie i powoduje powstanie siły przeciwdziałającej ruchowi elektronów, równoważącej działanie sił Lorentza \eqref{eq:lorentz}. Dzięki temu moment elektromagnetyczny nie prowadzi do nieskończonego przyspieszenia wirnika.  
+
+Wartość SEM zależy liniowo od prędkości obrotowej wirnika i parametrów konstrukcyjnych:
+\begin{equation}
+	\varepsilon = k_{\Phi} \, \omega_{r},
+	\label{eq:sem}
+\end{equation}
+gdzie:
+$\varepsilon$ to siła elektromotoryczna (V), $\omega_{r}$ to prędkość obrotowa wirnika (rad/s), $k_{\Phi}$ to stała napięciowa silnika (V $\cdot$ s/rad).
+\vspace{1.5cm}
+ 
+ 
+\section{Realizacja modelu w środowisku symulacyjnym}
+% zadanie 1
+
+\section{Analiza rozruchu modelu do prędkości biegu jałowego}
+% zadanie 2
+
+\section{Analiza porównawcza stanu biegu jałowego}
+% zadanie 3
+
+\section{Porównanie stanu dynamicznego rozruchu}
+% zadanie 4
+
+\section{Przykładowa aplikacja silnika}
+% zadanie 5
+
+Wybór silnika zależy od koncepcji całego układu napędowego. Proces ten można jednak sprowadzić do kilku podstawowych kryteriów:
+\begin{enumerate}[label*=\alph*)]
+	\item napiecie i rodzaj prądu: DC lub AC
+	\item moc i prędkość obrotowa (kątowa)
+	\item rodzaj pracy znamionowej 
+\end{enumerate}
+Zatem, rozważając przykładowe zastosowanie silnika analizowanego podczas ćwiczenia, zwrócono szczególną uwagę na powyższe kryteria.
+
+
+\section{Zbieżność modelu z danymi znamionowymi}
+% zadanie 6
+
+
+\section{Literatura}
+\begin{thebibliography}{9}
+	\bibitem{ekurs}
+	Materiały do ćwiczenia laboratoryjnego dostępne na platformie eKursy, Politechnika Poznańska, \texttt{https://ekursy.put.poznan.pl/mod/folder/view.php?id=3022724}
+	\bibitem{zawirski}
+	K. Zawirski, J. Deskur, T. Kaczmarek, \textit{Automatyka napędu elektrycznego}, Wydawnictwo Politechniki Poznańskiej, 2012
+\end{thebibliography}
+
+
+
+
+\end{document}
