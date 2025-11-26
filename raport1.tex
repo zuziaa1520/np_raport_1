@@ -7,6 +7,8 @@
 \usepackage{lmodern} %Type1-font for non-english texts and characters
 \usepackage{setspace}
 \usepackage{enumitem}
+\usepackage{subcaption}
+
 
 \usepackage[cmex10]{amsmath}
 
@@ -28,7 +30,6 @@
 \usepackage{color}
 \usepackage{xcolor}
 
-\usepackage{subfigure}
 \usepackage{multirow}
 
 %\usepackage{epstopdf}
@@ -219,8 +220,11 @@ Z równania \eqref{eq:predkosc} wynika, że przy stałym napięciu zasilania $U_
 \section{Realizacja modelu w środowisku symulacyjnym}
 % zadanie 1
 
-\subsection{Przebieg ćwiczenia}
-Przed rzeczywistą realizacją projektu w środowisku Simulink zrealizowano model silnika prądu stałego (Rysunek ref), zgodnie z metodyką przedstawioną w skrypcie do ćwiczenia \cite{ekurs}. Parametry silnika zadeklarowano w niezależnym skrypcie w środowisku MATLAB, jak przedstawiono w Listing \ref{lst:silnik}.
+Przed rzeczywistą realizacją projektu w środowisku Simulink zrealizowano model silnika prądu stałego (Rysunek \ref{fig:model}), zgodnie z metodyką przedstawioną w skrypcie do ćwiczenia \cite{ekurs}. Parametry silnika zadeklarowano w niezależnym skrypcie w środowisku MATLAB, jak przedstawiono w Listing \ref{lst:silnik}.
+
+W modelu silnika prądu stałego (rysunek \ref{fig:model}) wprowadzono kilka uproszczeń, aby ułatwić analizę działania układu. Stałą napięciową oraz stałą momentową zastąpiono jednym współczynnikiem $k_{\Phi}$, zgodnie z omówieniem w punkcie~2.5. Zrezygnowano również z modelowania toru wymuszenia momentem obciążenia $T_l$, przyjmując, że w analizowanym przypadku zakłócenia wprowadzane przez ten człon są równe zero.
+
+
 
 \begin{lstlisting}[language=Matlab,
 	caption={Przyjęte parametry},
@@ -237,24 +241,27 @@ Przed rzeczywistą realizacją projektu w środowisku Simulink zrealizowano mode
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=\textwidth,trim=0cm 5cm 0cm 5cm,clip]{model.pdf}
+	\includegraphics[width=\textwidth,trim=0cm 6cm 0cm 6cm,clip]{model.pdf}
 	\caption{Model silnika w środowisku Simulink}
 	\label{fig:model}
 \end{figure}
 
 Parametry podane w skrypcie z Listing \ref{lst:silnik} zostały zapisane do Workspace MATLAB, co umożliwiło ich wykorzystanie w modelu zbudowanym w środowisku Simulink. Następnie uruchomiono symulację, a dane z oscyloskopu zapisano w Workspace w celu uzyskania czytelnych przebiegów prędkości obrotowej oraz prądu twornika. 
-\\
+
+
+\vspace{1.5cm}
+\section{Analiza rozruchu modelu do prędkości biegu jałowego}
+% zadanie 2
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=\textwidth]{przebiegi1.pdf}
+	\includegraphics[width=\textwidth]{przebiegi2.pdf}
 	\caption{Przebiegi czasowe prędkości obrotowej $\omega_r$ oraz prądu twornika $i_a$ w odpowiedzi na wymuszenie skokowe}
 	\label{fig:przebiegi1}
 \end{figure}
 
-Na rysunku \ref{fig:przebiegi1} przedstawiona jest dynamika rozruchu modelu maszyny przy skokowym wymuszeniu. Wymuszeniem jest napięcie twornika o wartości $U_a = 240$ V. 
-
-\subsection{Obserwacje}
+Na rysunku \ref{fig:przebiegi1} przedstawiona jest dynamika rozruchu modelu maszyny do prędkości biegu jałowego przy skokowym wymuszeniu. Wymuszeniem jest napięcie twornika o wartości $U_a = 240$ V. 
+\\
 
 Wartość prędkości obrotowej $\omega_r$ przy wymuszeniu skokowym szybko narasta, bez przeregulowań, do wartości $116$ rad/s. Wartość oczekiwana prędkości w stanie ustalonym może być wyznaczona z zależności opisanej wzorem \eqref{eq:predkosc}: 
 
@@ -273,14 +280,52 @@ Prąd twornika w chwili podania wymuszenia skokowego gwałtownie rośnie, a nast
 
 Wartość ta jest jednak przeszacowana, ponieważ nie uwzględnia dynamiki obwodu twornika ani wpływu siły elektromotorycznej, która pojawia się wraz ze wzrostem prędkości obrotowej i ogranicza wartość płynącego prądu. W modelu symulacyjnym prąd twornika osiąga maksymalnie $62$ A.
 
-
-\vspace{1.5cm}
-\section{Analiza rozruchu modelu do prędkości biegu jałowego}
-% zadanie 2
+W chwili przyłączenia obwodu twornika do modelu, prąd jaki popłynie przez obwód twornika $i_a$ ograniczony jest tylko rezystancją obwodu wornika $R_a$, gdyż przy $\omega_r = 0$ siła elektromotoryczna ma także wartość zerową $\varepsilon = 0$. Wraz ze wzrostem prędkości $\omega_r$, wzrastająca siła elektromotoryczna $\varepsilon$ powoduje zmniejszanie się wartości prądu twornika $i_a$ \cite{sidorowicz}. 
 
 \vspace{1.5cm}
 \section{Analiza porównawcza stanu biegu jałowego}
 % zadanie 3
+
+\subsection{$\mathbf{U_a = 50}$ V}
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{model50.pdf}
+		\caption{Przebieg odfiltrowanej prędkości kątowej silnika.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres2_50.pdf}
+		\caption{Przebieg odfiltrowanego prądu twornik.}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres3_50.pdf}
+		\caption{Przebieg odfiltrowanego napięcia twornika.}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_50.pdf}
+		\caption{Przebiegi sygnałów zarejestrowanych za pomocą oscyloskopu.}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_ 2okresy_50.pdf}
+		\caption{Symulacja procesu rozruchu silnika opracowana w środowisku Simulink/Matlab.}
+	\end{subfigure}
+	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika \SI{200}{V}.}
+\end{figure}
+
+\subsection{$\mathbf{U_a = 100}$ V}
+
+\subsection{$\mathbf{U_a = 201}$ V}
+
+\subsection{$\mathbf{U_a = 240}$ V}
 
 Na wykresie napięcia twornika widać, że napięcie to rośnie w czasie. Jest to konsekwencją występowania siły elektromotorycznej (SEM), która indukuje napięcie przeciwdziałające zmianom prądu. W rezultacie średnia wartość napięcia pozostaje nieco wyższa od wartości SEM, co zapewnia przepływ prądu w uzwojeniach wirnika. Obserwowany ciągły wzrost napięcia odpowiada narastaniu SEM wraz z przyspieszaniem wirnika w trakcie symulacji.
 
@@ -301,7 +346,87 @@ Wybór silnika zależy od koncepcji całego układu napędowego. Proces ten moż
 	\item moc i prędkość obrotowa (kątowa)
 	\item rodzaj pracy znamionowej 
 \end{enumerate}
-Zatem, rozważając przykładowe zastosowanie silnika analizowanego podczas ćwiczenia, zwrócono szczególną uwagę na powyższe kryteria.
+Zatem, rozważając przykładowe zastosowanie silnika analizowanego podczas ćwiczenia, zwrócono szczególną uwagę na powyższe kryteria \cite{zawirski}.
+\\
+
+Silnik PZBb44b to maszynowy silnik prądu stałego o mocy znamionowej 1.5 kW,
+zasilaniu 230 V oraz prądzie twornika 6.5 A. Pracuje przy prędkości
+1450~rpm i posiada wzbudzenie własne o prądzie 0.4~A. Parametry te pozwalają
+na wykorzystanie go w aplikacjach wymagających stabilnej prędkości obrotowej
+i umiarkowanego momentu.
+
+\subsection{Aplikacje}
+
+Ze względu na moc i prędkość znamionową silnik może być stosowany w:
+\begin{itemize}
+	\item małych pompach wirowych,
+	\item sprężarkach tłokowych o niskiej mocy,
+	\item przenośnikach taśmowych,
+	\item mieszadłach i mieszarkach przemysłowych,
+	\item prostych napędach maszyn warsztatowych.
+\end{itemize}
+
+\subsubsection{Rozpoznanie rynku}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|p{2.7cm}|p{1.6cm}|p{1.8cm}|p{2.7cm}|p{3.2cm}|p{2cm}|}
+		\hline
+		\textbf{Model} & \textbf{Moc} & \textbf{Prędkość} & \textbf{Napięcie} & \textbf{Prądy} & \textbf{Moment}  \\ \hline
+		
+		PZBb44b &
+		1.5 kW &
+		1450 rpm &
+		230 V (DC) &
+		6.5 A (tw.), 0.4 A (wzb.) &
+		$\approx 9.9$ Nm  \\ \hline
+		
+		ABB M3AA &
+		1.5 kW &
+		1445--1450 rpm &
+		230/400/415 V, 3F, 50 Hz &
+		3.24--5.85 A &
+		$\approx 9.95$ Nm  \\ \hline
+		
+		Siemens SIMOTICS GP &
+		1.5 kW &
+		$\approx 1450$ rpm &
+		230/400 V lub 400/690 V, 3F &
+		$\approx 8.4$ A (zależnie od wersji) &
+		---  \\ \hline
+		
+		WEG W22 &
+		1.5 kW &
+		1450--1500 rpm &
+		220--240/380--415 V, 3F &
+		--- &
+		---  \\ \hline
+		
+		Maedler / SM-I IEC 90L &
+		1.5 kW &
+		1430--1450 rpm &
+		230/400 V, 3F &
+		--- &
+		---  \\ \hline
+		
+	\end{tabular}
+\end{table}
+
+Silniki te stanowią porównywalne konstrukcje pod względem mocy i prędkości,
+przez co mogą być wykorzystane jako modele referencyjne w procesie symulacji
+i doboru parametrów zastępczych. Główne różnice pomiędzy silnikiem PZBb44b a pozostałymi silnikami
+branymi pod uwagę wynikają przede wszystkim z odmiennych metod zasilania, a co za tym idzie
+z charakterystycznych sposobów regulacji prędkości oraz kształtowania
+momentu. Silnik PZBb44b jako maszyna prądu stałego z wzbudzeniem własnym
+utrzymuje prędkość zależną od napięcia twornika oraz strumienia
+wzbudzenia, co umożliwia płynną i szeroką regulację obrotów bez konieczności
+stosowania dodatkowych układów energoelektronicznych. Z kolei silniki
+indukcyjne AC pracują przy prędkości wyznaczonej przez częstotliwość sieci
+i liczbę biegunów, a zmiana prędkości wymaga użycia falownika. W efekcie
+każda z tych maszyn cechuje się odmiennym zachowaniem dynamicznym,
+sprawnością regulacji oraz zakresem możliwej kontroli momentu, co przekłada
+się na praktyczne zastosowania i sposób integracji z układem napędowym.
+
 
 \vspace{1.5cm}
 \section{Zbieżność modelu z danymi znamionowymi}
@@ -314,6 +439,8 @@ Zatem, rozważając przykładowe zastosowanie silnika analizowanego podczas ćwi
 	Materiały do ćwiczenia laboratoryjnego dostępne na platformie eKursy, Politechnika Poznańska, \texttt{https://ekursy.put.poznan.pl/mod/folder/view.php?id=3022724}
 	\bibitem{zawirski}
 	K. Zawirski, J. Deskur, T. Kaczmarek, \textit{Automatyka napędu elektrycznego}, Wydawnictwo Politechniki Poznańskiej, 2012
+	\bibitem{sidorowicz}
+	J. Sidorowicz, \textit{Napęd elektryczny i jego sterowanie}, Oficyna Wydawicza Politechniki Warszawskiej, 1997
 \end{thebibliography}
 
 
