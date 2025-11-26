@@ -49,7 +49,7 @@
 	numbers=left, stepnumber=2, numbersep=5pt,
 	numberstyle=\tiny\color{gray},
 	keywordstyle=\color{blue},
-	commentstyle=\color{pakistangreen},
+	commentstyle=\color{gray-pp},
 	stringstyle=\color{mauve},
 	backgroundcolor = \color{whitesmoke},
 	breakatwhitespace=true,
@@ -107,7 +107,7 @@
 			\hline 
 			\multicolumn{1}{|c|}{Dz>AiR>Sem5} & \multicolumn{1}{c|}{Napędy przekształtnikowe (NP)} & \multicolumn{1}{c|}{2025/26 (s.zim.)} \\
 			\hline
-			\textbf{Skład osobowy:} \par Zuzanna Andrzejak 159522 \par Jan Andrzejewski  000000 \par Mateusz Banaszak 000000 \par Piotr Bednarek  000000 & 
+			\textbf{Skład osobowy:} \par Zuzanna Andrzejak 159522 \par Jan Andrzejewski 159512 \par Mateusz Banaszak 159416 \par Piotr Bednarek 159701 & 
 			\textbf{Silnik elektryczny i jego model obwodowy. Siły: Lorentz'a, elektrodynamiczna, elektromotoryczna. Zbieżność modelu.} 
 			& Data wyk.:\par 20.11.2025\\
 			\hline
@@ -123,7 +123,7 @@
 
 \section{Wprowadzenie}
 
-Ćwiczenie laboratoryjne miało na celu analizę modelu obwodowego silnika obcowzbudnego komutatorowego prądu stałego. Model zastosowany podczas ćwiczenia był modelem zidealizowanym i nie stanowił dokładnego odwzorowania rzeczywistego ukłądu napędowego. 
+Ćwiczenie laboratoryjne miało na celu analizę modelu obwodowego silnika obcowzbudnego komutatorowego prądu stałego \cite{ekurs}. Model zastosowany podczas ćwiczenia był modelem zidealizowanym i nie stanowił dokładnego odwzorowania rzeczywistego ukłądu napędowego. 
 
 Ćwiczenie przeprowadzono w sali C3 w budynku A22b, wyposażonej w zestawy laboratoryjne napędowe, panele sterowania oraz przyrządy pomiarowe. W trakcie zajęć wykorzystano równień środowisko symulacyjne MATLAB wraz z Simulink. 
 \vspace{1.5cm}
@@ -176,10 +176,10 @@ Moment elektromagnetyczny w silniku prądu stałego jest generowany w wyniku dzi
 gdzie: $I$ to natężenie prądu (A), $\vec{l}$ to długość uzwojenia (m), $\vec{B}$ to wektor indukcji magnetycznej (T), $\vec{r}$ to ramię siły (m).
 \\
 
-Dla uproszczonego modelu silnika prądu stałego można wyróżnić tzw. \textbf{stałą momentową $k_{\Phi}$}, która zależy od parametrów konstrukcyjnych silnika. Wtedy moment elektromagnetyczny wyraża się zależnością:
+Dla uproszczonego modelu silnika prądu stałego można wyróżnić tzw. stałą momentową $k_{\Phi}$, która zależy od parametrów konstrukcyjnych silnika. Wtedy moment elektromagnetyczny wyraża się zależnością:
 \begin{equation}
 	T_e = i_a \, k_{\Phi}
-	\label{eg:moment_Te}
+	\label{eq:moment_Te}
 \end{equation}
 gdzie: $T_e$ to moment elektromagnetyczny (Nm), $i_a$ to prąd twornika (A), $k_{\Phi}$ to stała momentowa (Nm/A).
 
@@ -195,21 +195,103 @@ Wartość SEM zależy liniowo od prędkości obrotowej wirnika i parametrów kon
 \end{equation}
 gdzie:
 $\varepsilon$ to siła elektromotoryczna (V), $\omega_{r}$ to prędkość obrotowa wirnika (rad/s), $k_{\Phi}$ to stała napięciowa silnika (V $\cdot$ s/rad).
+
+
+\subsection{Stała momentowa i napięciowa}
+
+W teoretycznych rozważaniach współczynnik $k_{\Phi}$ pojawia się zarówno w równaniu \eqref{eq:moment_Te}, jak i w \eqref{eq:sem}. W rzeczywistości są to dwie różne stałe: w równaniu \eqref{eq:moment_Te} występuje \textbf{stała momentowa} $k_m$ (Nm/A), natomiast w \eqref{eq:sem} występuje \textbf{stała napięciowa} $k_v$ (V$\cdot$s/rad).  
+
+Stała momentowa $k_m$ wpływa bezpośrednio na wartość momentu elektromagnetycznego $T_e$, który zależy od kąta położenia wirnika względem pola magnetycznego. Dlatego jej działanie nie jest symetryczne w całym cyklu obrotu. Natomiast stała napięciowa $k_v$, powiązana z siłą elektromotoryczną $\varepsilon$, działa symetrycznie, gdyż SEM zależy głównie od prędkości obrotowej wirnika i parametrów konstrukcyjnych, a nie od kąta położenia przewodnika w polu magnetycznym.
+
+W praktyce, w notach katalogowych są one rozróżniane, jednak dla uproszczenia modelu symulacyjnego podczas ćwiczenia operowano jednym współczynnikiem $k_{\Phi} $, gdyż różnice między nimi są niewielkie.
+\\ 
+
+Współczynnik $k_{\Phi}$ ma kluczowe znaczenie w analizie charakterystyk dynamicznych silnika, ponieważ bezpośrednio wpływa na prędkość obrotową wirnika przy zadanym napięciu zasilania i prądzie twornika. \textbf{Równanie sterowania} w stanie ustalonym można wyprowadzić na podstawie bilansu napięć w obwodzie twornika oraz zależności elektromotorycznej siły (SEM) generowanej w silniku. Przyjmuje ono postać:
+
+\begin{equation}
+	\omega_r = \frac{U_a - R_a i_a}{k_{\Phi}}
+	\label{eq:predkosc}
+\end{equation}
+
+Z równania \eqref{eq:predkosc} wynika, że przy stałym napięciu zasilania $U_a$ i prądzie twornika $i_a$, zmniejszenie wartości współczynnika $k_{\Phi}$ prowadzi do proporcjonalnego wzrostu prędkości obrotowej wirnika. Zjawisko to wynika z bezpośredniego związku między strumieniem magnetycznym a momentem elektromagnetycznym wytwarzanym przez silnik.
+
 \vspace{1.5cm}
- 
- 
 \section{Realizacja modelu w środowisku symulacyjnym}
 % zadanie 1
 
+\subsection{Przebieg ćwiczenia}
+Przed rzeczywistą realizacją projektu w środowisku Simulink zrealizowano model silnika prądu stałego (Rysunek ref), zgodnie z metodyką przedstawioną w skrypcie do ćwiczenia \cite{ekurs}. Parametry silnika zadeklarowano w niezależnym skrypcie w środowisku MATLAB, jak przedstawiono w Listing \ref{lst:silnik}.
+
+\begin{lstlisting}[language=Matlab,
+	caption={Przyjęte parametry},
+	label={lst:silnik}
+	]
+	Ra = 3.0;           				% (Ohm)
+	La = 10e-3;    		% (H)
+	kfi = 2.0;        			  % (Nm/A)
+	J = 25e-3;    			% (kg*m^2)
+	b1 = 0.009;      		   % (Nm*s/rad)
+	tau = La/Ra;     	% (s)
+	Ua = 240;
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth,trim=0cm 5cm 0cm 5cm,clip]{model.pdf}
+	\caption{Model silnika w środowisku Simulink}
+	\label{fig:model}
+\end{figure}
+
+Parametry podane w skrypcie z Listing \ref{lst:silnik} zostały zapisane do Workspace MATLAB, co umożliwiło ich wykorzystanie w modelu zbudowanym w środowisku Simulink. Następnie uruchomiono symulację, a dane z oscyloskopu zapisano w Workspace w celu uzyskania czytelnych przebiegów prędkości obrotowej oraz prądu twornika. 
+\\
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{przebiegi1.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej $\omega_r$ oraz prądu twornika $i_a$ w odpowiedzi na wymuszenie skokowe}
+	\label{fig:przebiegi1}
+\end{figure}
+
+Na rysunku \ref{fig:przebiegi1} przedstawiona jest dynamika rozruchu modelu maszyny przy skokowym wymuszeniu. Wymuszeniem jest napięcie twornika o wartości $U_a = 240$ V. 
+
+\subsection{Obserwacje}
+
+Wartość prędkości obrotowej $\omega_r$ przy wymuszeniu skokowym szybko narasta, bez przeregulowań, do wartości $116$ rad/s. Wartość oczekiwana prędkości w stanie ustalonym może być wyznaczona z zależności opisanej wzorem \eqref{eq:predkosc}: 
+
+\begin{equation}
+	\omega_r = \frac{U_a}{k_{\Phi}} = \frac{240 \ \text{V}}{2 \ \text{V}\cdot \text{rad/s}} = 120 \ \text{rad/s}
+\end{equation}
+
+Prędkość osiągnięta w stanie ustalonym jest nieco niższa od wartości oczekiwanej, ponieważ w powyższym oszacowaniu pominięto spadek napięcia na rezystancji twornika $i_a R_a$. 
+\\
+
+Prąd twornika w chwili podania wymuszenia skokowego gwałtownie rośnie, a następnie opada, osiągając w stanie ustalonym wartość $2.9$ A. Możliwe jest oszacowanie oczekiwanej wartości maksymalnego prądu rozruchowego z zależności:
+
+\begin{equation}
+	i_{a \ \text{max}} = \frac{U_a}{R_a} = \frac{240 \ \text{V}}{3 \ \Omega} = 80 \ \text{A}
+\end{equation}
+
+Wartość ta jest jednak przeszacowana, ponieważ nie uwzględnia dynamiki obwodu twornika ani wpływu siły elektromotorycznej, która pojawia się wraz ze wzrostem prędkości obrotowej i ogranicza wartość płynącego prądu. W modelu symulacyjnym prąd twornika osiąga maksymalnie $62$ A.
+
+
+\vspace{1.5cm}
 \section{Analiza rozruchu modelu do prędkości biegu jałowego}
 % zadanie 2
 
+\vspace{1.5cm}
 \section{Analiza porównawcza stanu biegu jałowego}
 % zadanie 3
 
+Na wykresie napięcia twornika widać, że napięcie to rośnie w czasie. Jest to konsekwencją występowania siły elektromotorycznej (SEM), która indukuje napięcie przeciwdziałające zmianom prądu. W rezultacie średnia wartość napięcia pozostaje nieco wyższa od wartości SEM, co zapewnia przepływ prądu w uzwojeniach wirnika. Obserwowany ciągły wzrost napięcia odpowiada narastaniu SEM wraz z przyspieszaniem wirnika w trakcie symulacji.
+
+
+
+
+\vspace{1.5cm}
 \section{Porównanie stanu dynamicznego rozruchu}
 % zadanie 4
 
+\vspace{1.5cm}
 \section{Przykładowa aplikacja silnika}
 % zadanie 5
 
@@ -221,11 +303,11 @@ Wybór silnika zależy od koncepcji całego układu napędowego. Proces ten moż
 \end{enumerate}
 Zatem, rozważając przykładowe zastosowanie silnika analizowanego podczas ćwiczenia, zwrócono szczególną uwagę na powyższe kryteria.
 
-
+\vspace{1.5cm}
 \section{Zbieżność modelu z danymi znamionowymi}
 % zadanie 6
 
-
+\vspace{1.5cm}
 \section{Literatura}
 \begin{thebibliography}{9}
 	\bibitem{ekurs}
