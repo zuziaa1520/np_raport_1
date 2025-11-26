@@ -9,6 +9,10 @@
 \usepackage{enumitem}
 \usepackage{subcaption}
 
+\usepackage{booktabs} % Dla ładniejszych linii poziomych (\toprule, \midrule)
+\usepackage{colortbl} % Dla kolorowania wierszy
+\usepackage{array}    % Użyteczne z p{...}
+
 
 \usepackage[cmex10]{amsmath}
 
@@ -232,9 +236,9 @@ W modelu silnika prądu stałego (rysunek \ref{fig:model}) wprowadzono kilka upr
 	]
 	Ra = 3.0;           				% (Ohm)
 	La = 10e-3;    		% (H)
-	kfi = 2.0;        			  % (Nm/A)
+	kfi = 1.4;        			  % (Nm/A)
 	J = 25e-3;    			% (kg*m^2)
-	b1 = 0.009;      		   % (Nm*s/rad)
+	b1 = 0.06;      		 	  % (Nm*s/rad)
 	tau = La/Ra;     	% (s)
 	Ua = 240;
 \end{lstlisting}
@@ -285,47 +289,252 @@ W chwili przyłączenia obwodu twornika do modelu, prąd jaki popłynie przez ob
 \vspace{1.5cm}
 \section{Analiza porównawcza stanu biegu jałowego}
 % zadanie 3
+W celu weryfikacji uzyskanego modelu silnika prądu stałego przeprowadzono porównanie przebiegów prądu twornika, napięcia twornika oraz prędkości obrotowej z wartościami eksperymentalnymi.
+ 
+W tym celu uruchomiono silnik za pośrednictwem przekształtnika DML, stosując odpowiednie, zgodne z warunkami symulacji, parametry procesowe oraz zachowując obowiązujące zasady BHP.
+\\
+
+Dane pomiarowe zostały zarejestrowane za pomocą oscyloskopu, a następnie zapisane w plikach \texttt{.CSV}. Na ich podstawie, przy użyciu skryptu w środowisku MATLAB, wygenerowano wykresy przedstawiające przebiegi wszystkich analizowanych wielkości.
+
+Uzyskane charakterystyki umożliwiły przeprowadzenie analizy porównawczej w warunkach biegu jałowego oraz dostrojenie parametrów modelu symulacyjnego, takich jak współczynnik momentowy $k_{\Phi}$ oraz współczynnik tarcia wewnętrznego $b_1$. Parametry te dobrano w taki sposób, aby uzyskać zgodność przebiegów symulacyjnych z eksperymentalnymi na poziomie $\pm 5\%$.
 
 \subsection{$\mathbf{U_a = 50}$ V}
 
+Współczynniki $k_{\Phi}$ oraz $b_1$ zostały pozostawione bez zmian, zgodnie z parametrami symulacji zawartymi w Listing \ref{lst:silnik}. Dla wymuszenia napięciem twornika $U_a = 50$ V uzyskano zbieżność symulacji z danymi empirycznymi o wartości: 
+
+\begin{equation}
+	\frac{U_e - U_s}{U_e} \cdot 100 \% = \frac{52.5 \text{V} - 50 \text{V}}{52.5 \text{V}} \cdot 100 \% \approx 4.7\%
+	\label{eq:approx_50}
+\end{equation}
+
+Na rysunku \ref{fig:sym50} został przedstawiony wykres symualcji dla danego wymuszenia, a na rysunku \ref{fig:50} wykresy oparte na wartościach uzyskanych eksperymentalnie. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{model50.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika uzyskanie symulacyjnie}
+	\label{fig:sym50}
+\end{figure}
+
+
 \begin{figure}[H]
 	\centering
+	
 	\begin{subfigure}[b]{0.48\textwidth}
-		\includegraphics[width=\linewidth]{model50.pdf}
-		\caption{Przebieg odfiltrowanej prędkości kątowej silnika.}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{50_current.pdf}
+		\caption{Przebieg odfiltrowanego natężenia prądu twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{50_speed.pdf}
+		\caption{Przebieg odfiltrowanej prędkości obrotowej}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_50.pdf}
+		\caption{Przebieg odfiltorwanego napiecia twornika}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.48\textwidth}
 		\includegraphics[width=\linewidth]{wykres2_50.pdf}
-		\caption{Przebieg odfiltrowanego prądu twornik.}
+		\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika}
 	\end{subfigure}
 	
 	\vspace{0.5cm}
 	
 	\begin{subfigure}[b]{0.48\textwidth}
 		\includegraphics[width=\linewidth]{wykres3_50.pdf}
-		\caption{Przebieg odfiltrowanego napięcia twornika.}
+		\caption{Przebiegi odczytane z oscyloskopu}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.48\textwidth}
-		\includegraphics[width=\linewidth]{wykres4_50.pdf}
-		\caption{Przebiegi sygnałów zarejestrowanych za pomocą oscyloskopu.}
+		\includegraphics[width=\linewidth]{wykres4_ 2okresy_50.pdf}
+		\caption{Przybliżony przebieg napiecia twornika, na którym widoczne są momenty przełączania termistorów}
+	\end{subfigure}
+	
+	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika $U_a = 50$ V}
+	\label{fig:50}
+\end{figure}
+
+\subsection{$\mathbf{U_a = 100}$ V}
+
+Współczynniki $k_{\Phi}$ oraz $b_1$ zostały pozostawione bez zmian, zgodnie z parametrami symulacji zawartymi w Listing \ref{lst:silnik}. Dla wymuszenia napięciem twornika $U_a = 100$ V uzyskano zbieżność symulacji z danymi empirycznymi o wartości: 
+\begin{equation}
+	\frac{U_e - U_s}{U_e} \cdot 100 \% = \frac{102 \text{V} - 100 \text{V}}{102 \text{V}} \cdot 100 \% \approx 1.9 \%
+	\label{eq:approx_100}
+\end{equation}
+
+Na rysunku \ref{fig:sym100} został przedstawiony wykres symualcji dla danego wymuszenia, a na rysunku \ref{fig:100} wykresy oparte na wartościach uzyskanych eksperymentalnie. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{model100.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika uzyskanie symulacyjnie}
+	\label{fig:sym100}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{100_current.pdf}
+		\caption{Przebieg odfiltrowanego natężenia prądu twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{100_speed.pdf}
+		\caption{Przebieg odfiltrowanej prędkości obrotowej}
 	\end{subfigure}
 	
 	\vspace{0.5cm}
 	
 	\begin{subfigure}[b]{0.48\textwidth}
-		\includegraphics[width=\linewidth]{wykres4_ 2okresy_50.pdf}
-		\caption{Symulacja procesu rozruchu silnika opracowana w środowisku Simulink/Matlab.}
+		\includegraphics[width=\linewidth]{wykres4_100.pdf}
+		\caption{Przebieg odfiltorwanego napiecia twornika}
 	\end{subfigure}
-	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika \SI{200}{V}.}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres2_100.pdf}
+		\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres3_100.pdf}
+		\caption{Przebiegi odczytane z oscyloskopu}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_2okresy_100.pdf}
+		\caption{Przybliżony przebieg napiecia twornika, na którym widoczne są momenty przełączania termistorów}
+	\end{subfigure}
+	
+	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika $U_a = 100$ V}
+	\label{fig:100}
 \end{figure}
-
-\subsection{$\mathbf{U_a = 100}$ V}
 
 \subsection{$\mathbf{U_a = 201}$ V}
 
+Współczynniki $k_{\Phi}$ oraz $b_1$ zostały pozostawione bez zmian, zgodnie z parametrami symulacji zawartymi w Listing \ref{lst:silnik}. Dla wymuszenia napięciem twornika $U_a = 201$ V uzyskano zbieżność symulacji z danymi empirycznymi o wartości: 
+\begin{equation}
+	\frac{U_e - U_s}{U_e} \cdot 100 \% = \frac{206 \text{V} - 201 \text{V}}{206 \text{V}} \cdot 100 \% \approx 2.4 \%
+	\label{eq:approx_201}
+\end{equation}
+
+Na rysunku \ref{fig:sym201} został przedstawiony wykres symualcji dla danego wymuszenia, a na rysunku \ref{fig:201} wykresy oparte na wartościach uzyskanych eksperymentalnie. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{model201.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika uzyskanie symulacyjnie}
+	\label{fig:sym201}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{201_current.pdf}
+		\caption{Przebieg odfiltrowanego natężenia prądu twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{201_speed.pdf}
+		\caption{Przebieg odfiltrowanej prędkości obrotowej}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_201.pdf}
+		\caption{Przebieg odfiltorwanego napiecia twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres2_201.pdf}
+		\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres3_201.pdf}
+		\caption{Przebiegi odczytane z oscyloskopu}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_2okresy_201.pdf}
+		\caption{Przybliżony przebieg napiecia twornika, na którym widoczne są momenty przełączania termistorów}
+	\end{subfigure}
+	
+	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika $U_a = 201$ V}
+	\label{fig:201}
+\end{figure}
+
 \subsection{$\mathbf{U_a = 240}$ V}
+
+Współczynniki $k_{\Phi}$ oraz $b_1$ zostały pozostawione bez zmian, zgodnie z parametrami symulacji zawartymi w Listing \ref{lst:silnik}. Dla wymuszenia napięciem twornika $U_a = 240$ V uzyskano zbieżność symulacji z danymi empirycznymi o wartości: 
+
+\begin{equation}
+	\frac{U_e - U_s}{U_e} \cdot 100 \% = \frac{248 \text{V} - 240 \text{V}}{248 \text{V}} \cdot 100 \% \approx 3.2 \%
+	\label{eq:approx_240}
+\end{equation}
+
+Na rysunku \ref{fig:sym240} został przedstawiony wykres symualcji dla danego wymuszenia, a na rysunku \ref{fig:240} wykresy oparte na wartościach uzyskanych eksperymentalnie. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.5\textwidth]{model240.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika uzyskanie symulacyjnie}
+	\label{fig:sym240}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{240_current.pdf}
+		\caption{Przebieg odfiltrowanego natężenia prądu twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\textwidth,trim=0cm 9cm 0cm 9cm,clip]{240_speed.pdf}
+		\caption{Przebieg odfiltrowanej prędkości obrotowej}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_240.pdf}
+		\caption{Przebieg odfiltorwanego napiecia twornika}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres2_240.pdf}
+		\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika}
+	\end{subfigure}
+	
+	\vspace{0.5cm}
+	
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres3_240.pdf}
+		\caption{Przebiegi odczytane z oscyloskopu}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.48\textwidth}
+		\includegraphics[width=\linewidth]{wykres4_2okresy_240.pdf}
+		\caption{Przybliżony przebieg napiecia twornika, na którym widoczne są momenty przełączania termistorów}
+	\end{subfigure}
+	
+	\caption{Zestawienie wyników eksperymentalnych dla napięcia twornika $U_a = 240$ V}
+	\label{fig:240}
+\end{figure}
 
 Na wykresie napięcia twornika widać, że napięcie to rośnie w czasie. Jest to konsekwencją występowania siły elektromotorycznej (SEM), która indukuje napięcie przeciwdziałające zmianom prądu. W rezultacie średnia wartość napięcia pozostaje nieco wyższa od wartości SEM, co zapewnia przepływ prądu w uzwojeniach wirnika. Obserwowany ciągły wzrost napięcia odpowiada narastaniu SEM wraz z przyspieszaniem wirnika w trakcie symulacji.
 
@@ -335,6 +544,32 @@ Na wykresie napięcia twornika widać, że napięcie to rośnie w czasie. Jest t
 \vspace{1.5cm}
 \section{Porównanie stanu dynamicznego rozruchu}
 % zadanie 4
+
+
+Porównanie przebiegów stanu dynamicznego rozruchu dla idealnego modelu w środowisku Simulink oraz dla rzeczywistego silnika sterowanego przekształtnikiem DML ujawnia istotne różnice w zakresie dynamiki i wartości szczytowych prądu.
+
+\subsection{Zakres rozbieżności}
+
+\begin{itemize}
+	\item \textbf{Dynamika prądu twornika ($\mathbf{i_a}$):}
+	
+	W modelu Simulink (np. rysunek \ref{fig:sym50}), reakcja na skok napięcia jest gwałtowna. Prąd rozruchowy rośnie bardzo szybko, a jego wartość teoretyczna jest znacząco przeszacowana.
+	Dla przykładu, w symulacji dla $U_a = 200\,\text{V}$ prąd może osiągać nawet $50\,\text{A}$. W rzeczywistym silniku (np. rysunek \ref{fig:50}d), prąd ma charakter impulsowy, osiągając szczyty rzędu $12$--$14\,\text{A}$. Średnia wartość prądu w fazie rozruchu jest dużo niższa, sięgając jedynie około $3.5\,\text{A}$. W obu przypadkach po fazie rozruchu prąd ustala się na niskich wartościach.
+	
+	\item \textbf{Dynamika prędkości obrotowej ($\omega_r$):}
+	
+	W modelu Simulink prędkość obrotowa narasta gwałtownie (bez przeregulowań) i bardzo szybko stabilizuje się na wartości ustalonej (np. rysunek \ref{fig:sym50}).
+	W rzeczywistym silniku (np. rysunek \ref{fig:50}b, \ref{fig:50}d) narastanie prędkości jest wyraźnie wolniejsze i bardziej liniowe. Charakterystyka ta odzwierciedla mniejszą dynamikę sterowania przez przekształtnik oraz rzeczywiste parametry mechaniczne układu.
+\end{itemize}
+
+\subsection{Przyczyny rozbieżności}
+
+Zaobserwowane różnice pomiędzy symulacją a pomiarami wynikają przede wszystkim z tego, że model obwodowy w Simulinku jest znacznym uproszczeniem rzeczywistego układu. Model traktuje silnik jak idealny układ RL, który reaguje natychmiast i bez żadnych strat, podczas gdy prawdziwy napęd zachowuje się o wiele bardziej złożenie. W praktyce silnik zasilany jest poprzez przekształtnik DML, który mimo dużej dynamiki nie jest w stanie odwzorować przebiegów w sposób tak idealny jak symulacja. Przekształtnik generuje dodatkowo pulsacje prądu, dobrze widoczne na przebiegach pomiarowych, czego model nie uwzględnia.
+
+Do tego dochodzi fakt, że model symulacyjny pomija wiele zjawisk fizycznych występujących w realnym silniku, takich jak zużycie i nierównomierność pracy szczotek, niewielkie przesunięcia komutatora względem wirnika czy rezystancje przewodów i straty mocy w samym przekształtniku. W warunkach laboratoryjnych znaczący wpływ mają także zakłócenia elektromagnetyczne, które powodują zaszumienie sygnałów i utrudniają bezpośrednie porównanie przebiegów.
+
+Podsumowując, rozbieżności te są naturalne i potwierdzają, że model w Simulinku jest jedynie przybliżeniem rzeczywistego układu. Rzeczywisty napęd charakteryzuje się mniejszą dynamiką, a jego zachowanie zależy również od zjawisk związanych z komutacją i sterowaniem impulsowym, których prosty model obwodowy nie jest w stanie w pełni odwzorować.
+
 
 \vspace{1.5cm}
 \section{Przykładowa aplikacja silnika}
@@ -357,7 +592,7 @@ i umiarkowanego momentu.
 
 \subsection{Aplikacje}
 
-Ze względu na moc i prędkość znamionową silnik może być stosowany w:
+Ze względu na moc i prędkość znamionową analizowany silnik może być stosowany w:
 \begin{itemize}
 	\item małych pompach wirowych,
 	\item sprężarkach tłokowych o niskiej mocy,
@@ -366,50 +601,28 @@ Ze względu na moc i prędkość znamionową silnik może być stosowany w:
 	\item prostych napędach maszyn warsztatowych.
 \end{itemize}
 
-\subsubsection{Rozpoznanie rynku}
+\subsection{Rozpoznanie rynku}
 
 \begin{table}[h!]
 	\centering
-	\begin{tabular}{|p{2.7cm}|p{1.6cm}|p{1.8cm}|p{2.7cm}|p{3.2cm}|p{2cm}|}
-		\hline
-		\textbf{Model} & \textbf{Moc} & \textbf{Prędkość} & \textbf{Napięcie} & \textbf{Prądy} & \textbf{Moment}  \\ \hline
+
+	\begin{tabular}{p{3cm} p{1.2cm} p{2cm} p{3.5cm} p{3cm} p{2cm}}
+		\toprule % Najgrubsza linia na górze
+		\textbf{Model} & \textbf{Moc} & \textbf{Prędkość} & \textbf{Napięcie} & \textbf{Prądy} & \textbf{Moment} \\ 
+		\midrule % Średnia linia oddzielająca nagłówek
 		
-		PZBb44b &
-		1.5 kW &
-		1450 rpm &
-		230 V (DC) &
-		6.5 A (tw.), 0.4 A (wzb.) &
-		$\approx 9.9$ Nm  \\ \hline
+		PZBb44b & 1.5 kW & 1450 rpm & 230 V (DC) & 6.5 A (tw.), 0.4 A (wzb.) & $\approx 9.9$ Nm \\ 
+		\rowcolor[gray]{0.95} % Szary kolor wiersza
+		ABB M3AA & 1.5 kW & 1445--1450 rpm & 230/400/415 V, 3F, 50 Hz & 3.24--5.85 A & $\approx 9.95$ Nm \\ 
+		Siemens SIMOTICS GP & 1.5 kW & $\approx 1450$ rpm & 230/400 V lub 400/690 V, 3F & $\approx 8.4$ A (zależnie od wersji) & --- \\ 
+		\rowcolor[gray]{0.95} % Szary kolor wiersza
+		WEG W22 & 1.5 kW & 1450--1500 rpm & 220--240 / 380--415 V, 3F & --- & --- \\ 
+		Maedler / SM-I IEC 90L & 1.5 kW & 1430--1450 rpm & 230/400 V, 3F & --- & --- \\ 
+		\bottomrule 
 		
-		ABB M3AA &
-		1.5 kW &
-		1445--1450 rpm &
-		230/400/415 V, 3F, 50 Hz &
-		3.24--5.85 A &
-		$\approx 9.95$ Nm  \\ \hline
-		
-		Siemens SIMOTICS GP &
-		1.5 kW &
-		$\approx 1450$ rpm &
-		230/400 V lub 400/690 V, 3F &
-		$\approx 8.4$ A (zależnie od wersji) &
-		---  \\ \hline
-		
-		WEG W22 &
-		1.5 kW &
-		1450--1500 rpm &
-		220--240/380--415 V, 3F &
-		--- &
-		---  \\ \hline
-		
-		Maedler / SM-I IEC 90L &
-		1.5 kW &
-		1430--1450 rpm &
-		230/400 V, 3F &
-		--- &
-		---  \\ \hline
-		
+
 	\end{tabular}
+	\caption{Porównanie parametrów silników elektrycznych}
 \end{table}
 
 Silniki te stanowią porównywalne konstrukcje pod względem mocy i prędkości,
@@ -431,9 +644,37 @@ się na praktyczne zastosowania i sposób integracji z układem napędowym.
 \vspace{1.5cm}
 \section{Zbieżność modelu z danymi znamionowymi}
 % zadanie 6
+Model silnika nie jest idealny, a podczas doboru parametrów symulacyjnych konieczne jest określenie priorytetów, czy ważniejsze jest uzyskanie dokładnego odwzorowania prądu, czy prędkości obrotowej. W praktyce decyzja ta stanowi kompromis i zależy zarówno od planowanego zastosowania silnika, jak i preferencji projektanta.
+
+W przedstawionym modelu udało się uzyskać zbieżność parametrów na poziomie akceptowalnym dla typowych analiz inżynierskich. Niewielkie odchylenia wynikają z uproszczeń modeli matematycznych oraz z pominięcia niektórych zjawisk fizycznych, takich jak nieliniowe straty w rdzeniu, starzenie materiałów czy zmienność parametrów uzwojeń przy nagrzewaniu. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\textwidth]{230.pdf}
+	\caption{Przebiegi czasowe prędkości obrotowej oraz prądu twornika uzyskanie symulacyjnie}
+	\label{fig:zbieznosc}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+
+	\begin{tabular}{l c c}
+		\toprule
+		\textbf{Parametr} & \textbf{Znamionowe} & \textbf{Symulacja} \\ 
+		\midrule
+		Napięcie (V) & 230 & 230 \\ 
+		Prędkość (rpm) & 1450 & 1428 \\ 
+		Prąd (A) & 6.5 & 6.66 \\ 
+		Moc (W) & 1500 & 1518 \\ 
+		\bottomrule
+	\end{tabular}
+	\caption{Porównanie parametrów znamionowych i symulacyjnych}
+\end{table}
+
+
 
 \vspace{1.5cm}
-\section{Literatura}
+
 \begin{thebibliography}{9}
 	\bibitem{ekurs}
 	Materiały do ćwiczenia laboratoryjnego dostępne na platformie eKursy, Politechnika Poznańska, \texttt{https://ekursy.put.poznan.pl/mod/folder/view.php?id=3022724}
